@@ -128,7 +128,11 @@ const readRoute = () => {
   if (h.startsWith('#/')) return h.slice(1);
   let p = window.location.pathname;
   if (BASE && p.startsWith(BASE)) p = p.slice(BASE.length);
-  else if (BASE) p = '/';
+  else {
+    // Hosted under an unknown prefix (e.g. MagicPath preview): keep only the app route part.
+    const m = p.match(/\/(layanan|harga|cabang|tentang|kontak|reservasi|faq|kebijakan-privasi|syarat-ketentuan)(\/.*)?$/);
+    p = m ? m[0] : '/';
+  }
   p = p.replace(/\/+$/, '') || '/';
   return p + window.location.search;
 };
